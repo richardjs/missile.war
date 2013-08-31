@@ -1,0 +1,16 @@
+{
+	"name": "missile.war",
+	"version": "0.1.0",
+	"author": "Richard Schneider <richard@schneiderbox.net>",
+	"description": "head-to-head game in the style of Missile Command",
+	"scripts": {
+		"start": "node server.js"
+	},
+	"respository": {
+		"type": "git",
+		"url": "https://github.com/richardjs/missile.war.git"
+	},
+	"dependencies": {
+		"socket.io": "latest"
+	}
+}
