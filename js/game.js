@@ -1,15 +1,20 @@
 var game = {
 	width: 1000,
 	height: 650,
-	groundDepth: 25,
+	ground: {
+		height: 25,
+		color: '#687',
+	},
 	city: {
+		number: 5,
 		width: 40,
 		height: 25,
 		color: '#ada',
 	},
-	ground: {
-		height: 25,
-		color: '#687',
+	turret: {
+		slots: [2, 6],
+		radius: 20,
+		color: '#daa',
 	},
 
 	backgroundColor: '#113',
@@ -28,16 +33,37 @@ var game = {
 	},
 	
 	renderBuildings: function(ctx){
-		var spacing = this.width / 8;
+		var numBuildings = this.city.number + this.turret.slots.length;
+		var spacing = this.width / (numBuildings+1);
+		
 		ctx.fillStyle = this.city.color;
-		for(var x = spacing; x < this.width; x += spacing){
+		for(var slot = 1; slot <= numBuildings; slot++){
+			if(this.turret.slots.indexOf(slot) != -1){
+				continue;
+			}
+
+			x = slot * spacing;
 			var cityLeft = x - this.city.width/2;
 			var cityTop = this.ground.height;
 			ctx.fillRect(cityLeft, cityTop,
-				this.city.width, this.city.height)
-			var cityTop = this.height - this.ground.height;
+				this.city.width, this.city.height);
+			cityTop = this.height - this.ground.height;
 			ctx.fillRect(cityLeft, cityTop,
-				this.city.width, -this.city.height)
+				this.city.width, -this.city.height);
+		}
+
+		ctx.fillStyle = this.turret.color;
+		for(var i = 0; i < this.turret.slots.length; i++){
+			var slot = this.turret.slots[i];
+			var x = spacing * slot;
+			var y = this.ground.height;
+			ctx.beginPath();
+			ctx.arc(x, y, this.turret.radius, Math.PI, 2*Math.PI, true);
+			ctx.fill();
+			y = this.height - this.ground.height;
+			ctx.beginPath();
+			ctx.arc(x, y, this.turret.radius, Math.PI, 2*Math.PI);
+			ctx.fill();
 		}
 	},
 }
