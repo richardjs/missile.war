@@ -18,10 +18,16 @@ var game = {
 		color: '#daa',
 	},
 	missile: {
-		speed: 50,
+		speed: 150,
 		color: '#f44',
 	},
 	missiles: [],
+	explosion:{
+		radius: 40,
+		speed: 100,
+		color: '#6aa',
+	},
+	explosions: [],
 	
 	init: function(){
 		this.numBuildings = this.city.number + this.turret.slots.length;
@@ -39,13 +45,21 @@ var game = {
 			}
 		}
 		for(var i = 0; i < removeIndices.length; i++){
+			var missile = this.missiles[removeIndices[i]];
 			this.missiles.splice(removeIndices[i], 1);
+			this.explosions.push({
+				x: missile.x,
+				y: missile.y,
+				startX: missile.startX,
+				startY: missile.startY,
+				radius: 0,
+			});
 		}
 	},
 
 	render: function(ctx){
 		this.renderBackground(ctx);
-		this.renderMissiles(ctx);
+		this.renderWeapons(ctx);
 		this.renderBuildings(ctx);
 	},
 
@@ -89,7 +103,7 @@ var game = {
 		}
 	},
 
-	renderMissiles: function(ctx){
+	renderWeapons: function(ctx){
 		ctx.strokeStyle = this.missile.color;
 		for(var i = 0; i < this.missiles.length; i++){
 			var missile = this.missiles[i];
@@ -97,6 +111,13 @@ var game = {
 			ctx.moveTo(missile.startX, missile.startY);
 			ctx.lineTo(missile.x, missile.y);
 			ctx.stroke();
+		}
+		ctx.fillStyle = this.explosion.color;
+		for(var i = 0; i < this.explosions.length; i++){
+			var explosion = this.explosions[i];
+			ctx.beginPath();
+			ctx.moveTo(explosion.startX, explosion.startY);
+
 		}
 	},
 
@@ -130,7 +151,11 @@ var canvas = $canvas.get(0);
 var ctx = canvas.getContext('2d');
 
 $canvas.click(function(event){
-	game.fire(event.button, event.offsetX, event.offsetY);
+	game.fire(0, event.offsetX, event.offsetY);
+});
+$canvas.on('contextmenu', function(event){
+	event.preventDefault();
+	game.fire(1, event.offsetX, event.offsetY);
 });
 
 var lastTime = null;
