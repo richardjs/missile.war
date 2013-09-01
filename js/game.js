@@ -78,12 +78,16 @@ var game = {
 	render: function(ctx){
 		this.renderBackground(ctx);
 		this.renderWeapons(ctx);
+		this.renderGround(ctx);
 		this.renderBuildings(ctx);
 	},
 
 	renderBackground: function(ctx){
 		ctx.fillStyle = this.backgroundColor;
 		ctx.fillRect(0, 0, this.width, this.height);
+	},
+
+	renderGround: function(ctx){
 		ctx.fillStyle = this.ground.color;
 		ctx.fillRect(0, 0, this.width, this.ground.height);
 		ctx.fillRect(0, this.height, this.width, -this.ground.height);
