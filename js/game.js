@@ -32,8 +32,8 @@ var game = {
 		var removeIndices = [];
 		for(var i = 0; i < this.missiles.length; i++){
 			var missile = this.missiles[i];
-			missile.x += missile.dx / delta;
-			missile.y += missile.dy / delta;
+			missile.x += missile.dx * delta / 1000;
+			missile.y += missile.dy * delta / 1000;
 			if(missile.y <= missile.endY){
 				removeIndices.push(i);	
 			}
