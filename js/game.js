@@ -41,8 +41,9 @@ var game = {
 			var missile = this.missiles[i];
 			missile.x += missile.dx * delta / 1000;
 			missile.y += missile.dy * delta / 1000;
-			if(missile.y <= missile.endY){
-				removeIndices.push(i);	
+			if((missile.dy < 0 && missile.y <= missile.endY) ||
+				(missile.dy > 0 && missile.y >= missile.endY)){
+					removeIndices.push(i);	
 			}
 		}
 		for(var i = 0; i < removeIndices.length; i++){
@@ -165,6 +166,30 @@ var game = {
 			dy: dy,
 			endY: y
 		});
+	},
+
+	enemyFire: function(turret, x, y){
+		var slotIndex = this.turret.slots.length - turret - 1;
+		var slot = this.turret.slots[slotIndex];
+		var startX = this.spacing * slot;
+		var startY = this.ground.height;
+		
+		x += 2*(this.width/2 - x);
+		y += 2*(this.height/2 - y);
+
+		var angle = Math.atan2(y - startY, x - startX);
+		var dy = this.missile.speed * Math.sin(angle);	
+		var dx = this.missile.speed * Math.cos(angle);
+
+		this.missiles.push({
+			startX: startX,
+			startY: startY,
+			x: startX,
+			y: startY,
+			dx: dx,
+			dy: dy,
+			endY: y
+		});
 	}
 }
 game.init();
@@ -176,12 +201,26 @@ var $canvas = $('<canvas></canvas')
 var canvas = $canvas.get(0);
 var ctx = canvas.getContext('2d');
 
+var socket = io.connect();
+socket.on('fire', function(missileData){
+	game.enemyFire(missileData.button, missileData.x, missileData.y);
+});
+
+
+function click(button, x, y){
+	game.fire(button, x, y);
+	socket.emit('fire', {
+		button: button,
+		x: x,
+		y: y
+	});
+}
 $canvas.click(function(event){
-	game.fire(0, event.offsetX, event.offsetY);
+	click(0, event.offsetX, event.offsetY);
 });
 $canvas.on('contextmenu', function(event){
 	event.preventDefault();
-	game.fire(1, event.offsetX, event.offsetY);
+	click(1, event.offsetX, event.offsetY);
 });
 
 var lastTime = null;
@@ -195,7 +234,6 @@ function frame(time){
 
 	window.requestAnimationFrame(frame);
 }
-
 function run(){
 	window.requestAnimationFrame(frame);
 }

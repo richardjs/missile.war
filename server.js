@@ -7,7 +7,8 @@ app.listen(8080);
 
 var allowedURLs = [
 	'/client.html',
-	'/js/game.js',
+	'/js/polyfills.js',
+	'/js/game.js'
 ];
 function handler(request, response){
 	var url = request.url;
@@ -32,15 +33,8 @@ function handler(request, response){
 }
 
 io.sockets.on('connection', function(socket){
-	console.log('connection');
-	socket.send('Hello, sockets!');
-	//socket.emit('news', {hello: 'world'});
-
-	socket.on('message', function(data){
-		console.log(data);
-		if(data == 'wazzup'){
-			socket.send({message: 'not much'});
-		}
+	socket.on('fire', function(launchData){
+		socket.broadcast.emit('fire', launchData);
 	});
 });
 
