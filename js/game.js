@@ -4,28 +4,29 @@ var game = {
 	backgroundColor: '#113',
 	ground: {
 		height: 25,
-		color: '#687',
+		color: '#687'
 	},
 	city: {
 		number: 5,
 		width: 40,
 		height: 25,
-		color: '#ada',
+		color: '#ada'
 	},
 	turret: {
 		slots: [2, 6],
 		radius: 20,
-		color: '#daa',
+		color: '#daa'
 	},
 	missile: {
 		speed: 150,
-		color: '#f44',
+		color: '#f44'
 	},
 	missiles: [],
 	explosion:{
 		radius: 40,
-		speed: 100,
-		color: '#6aa',
+		speed: 150,
+		duration: 300,
+		color: '#6aa'
 	},
 	explosions: [],
 	
@@ -53,7 +54,24 @@ var game = {
 				startX: missile.startX,
 				startY: missile.startY,
 				radius: 0,
+				duration: 0
 			});
+		}
+			
+		removeIndices = [];
+		for(var i = 0; i < this.explosions.length; i++){
+			var explosion = this.explosions[i];
+			if(explosion.radius < this.explosion.radius){
+				explosion.radius += this.explosion.speed * delta / 1000;
+			}else{
+				explosion.duration += delta;
+				if(explosion.duration > this.explosion.duration){
+					removeIndices.push(i);
+				}
+			}
+		}
+		for(var i = 0; i < removeIndices.length; i++){
+			this.explosions.splice(removeIndices[i], 1);
 		}
 	},
 
@@ -117,7 +135,11 @@ var game = {
 			var explosion = this.explosions[i];
 			ctx.beginPath();
 			ctx.moveTo(explosion.startX, explosion.startY);
-
+			ctx.lineTo(explosion.x, explosion.y);
+			ctx.stroke();
+			ctx.beginPath();
+			ctx.arc(explosion.x, explosion.y, explosion.radius, 0, 2*Math.PI);
+			ctx.fill()
 		}
 	},
 
@@ -137,7 +159,7 @@ var game = {
 			y: startY,
 			dx: dx,
 			dy: dy,
-			endY: y,
+			endY: y
 		});
 	}
 }
