@@ -64,6 +64,17 @@ var game = {
 					removeIndices.push(i);
 				}
 			}
+
+			for(var j = 0; j < this.missiles.length; j++){
+				var missile = this.missiles[j];
+				var distance = Math.sqrt(
+					Math.pow(missile.x - explosion.x, 2) + Math.pow(missile.y - explosion.y, 2)
+				);
+				if(distance <= explosion.radius){
+					console.log('!');
+					this.explodeMissile(j);
+				}
+			}
 		}
 		for(var i = 0; i < removeIndices.length; i++){
 			this.explosions.splice(removeIndices[i], 1);
