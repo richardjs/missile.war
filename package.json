@@ -12,5 +12,8 @@
 	},
 	"dependencies": {
 		"socket.io": "latest"
+	},
+	"engines": {
+		"node.js": "0.10.x"
 	}
 }
