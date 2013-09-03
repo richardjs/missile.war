@@ -55,6 +55,9 @@ var game = {
 			var explosion = this.explosions[i];
 			if(explosion.radius < this.explosion.radius){
 				explosion.radius += this.explosion.speed * delta / 1000;
+				if(explosion.radius > this.explosion.radius){
+					explosion.radius = this.explosion.radius;
+				}
 			}else{
 				explosion.duration += delta;
 				if(explosion.duration > this.explosion.duration){
