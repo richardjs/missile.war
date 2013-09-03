@@ -47,16 +47,7 @@ var game = {
 			}
 		}
 		for(var i = 0; i < removeIndices.length; i++){
-			var missile = this.missiles[removeIndices[i]];
-			this.missiles.splice(removeIndices[i], 1);
-			this.explosions.push({
-				x: missile.x,
-				y: missile.y,
-				startX: missile.startX,
-				startY: missile.startY,
-				radius: 0,
-				duration: 0
-			});
+			this.explodeMissile(i);
 		}
 			
 		removeIndices = [];
@@ -189,6 +180,19 @@ var game = {
 			dx: dx,
 			dy: dy,
 			endY: y
+		});
+	},
+
+	explodeMissile: function(i){
+		var missile = this.missiles[i];
+		this.missiles.splice(i, 1);
+		this.explosions.push({
+			x: missile.x,
+			y: missile.y,
+			startX: missile.startX,
+			startY: missile.startY,
+			radius: 0,
+			duration: 0
 		});
 	}
 }
