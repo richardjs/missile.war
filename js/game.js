@@ -71,7 +71,6 @@ var game = {
 					Math.pow(missile.x - explosion.x, 2) + Math.pow(missile.y - explosion.y, 2)
 				);
 				if(distance <= explosion.radius){
-					console.log('!');
 					this.explodeMissile(j);
 				}
 			}
