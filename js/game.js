@@ -47,7 +47,7 @@ var game = {
 			}
 		}
 		for(var i = 0; i < removeIndices.length; i++){
-			this.explodeMissile(i);
+			this.explodeMissile(removeIndices[i]);
 		}
 			
 		removeIndices = [];
