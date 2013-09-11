@@ -233,11 +233,15 @@ function click(button, x, y){
 	});
 }
 $canvas.click(function(event){
-	click(0, event.offsetX, event.offsetY);
+	var x = event.pageX - $canvas.offset().left;
+	var y = event.pageY - $canvas.offset().top;
+	click(0, x, y);
 });
 $canvas.on('contextmenu', function(event){
 	event.preventDefault();
-	click(1, event.offsetX, event.offsetY);
+	var x = event.pageX - $canvas.offset().left;
+	var y = event.pageY - $canvas.offset().top;
+	click(1, x, y);
 });
 
 var lastTime = null;
